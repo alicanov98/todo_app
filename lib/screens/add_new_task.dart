@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:todo_app/constants/color.dart';
+import 'package:todo_app/constants/tasktype.dart';
+import 'package:todo_app/model/task.dart';
 
-class AddNewTask extends StatelessWidget {
-  const AddNewTask({super.key});
+class AddNewTaskScreen extends StatefulWidget {
+  const AddNewTaskScreen({super.key, required this.addNewTask});
+  final void Function(Task newTask) addNewTask;
+  // Passing function as parameter
+
+  @override
+  State<AddNewTaskScreen> createState() => _AddNewTaskState();
+}
+
+class _AddNewTaskState extends State<AddNewTaskScreen> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+  Tasktype taskType = Tasktype.note;
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +66,12 @@ class AddNewTask extends StatelessWidget {
             ),
             const Padding(
                 padding: EdgeInsets.only(top: 10), child: Text('Task Titile')),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 41),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 41),
               child: TextField(
-                decoration:
-                    InputDecoration(filled: true, fillColor: Colors.white),
+                controller: titleController,
+                decoration: const InputDecoration(
+                    filled: true, fillColor: Colors.white),
               ),
             ),
             Padding(
@@ -71,6 +88,9 @@ class AddNewTask extends StatelessWidget {
                           content: Text('Category Selected one'),
                         ),
                       );
+                      setState(() {
+                        taskType = Tasktype.note;
+                      });
                     },
                     child: Image.asset('lib/assets/images/category_one.png'),
                   ),
@@ -82,6 +102,9 @@ class AddNewTask extends StatelessWidget {
                           content: Text('Category Selected two'),
                         ),
                       );
+                      setState(() {
+                        taskType = Tasktype.calendar;
+                      });
                     },
                     child: Image.asset('lib/assets/images/category_two.png'),
                   ),
@@ -93,25 +116,29 @@ class AddNewTask extends StatelessWidget {
                           content: Text('Category Selected three'),
                         ),
                       );
+                      setState(() {
+                        taskType = Tasktype.contest;
+                      });
                     },
                     child: Image.asset('lib/assets/images/category_three.png'),
                   ),
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
                     child: Column(
                       children: [
-                        Text('Date'),
+                        const Text('Date'),
                         Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: TextField(
-                              decoration: InputDecoration(
+                              controller: dateController,
+                              decoration: const InputDecoration(
                                   filled: true, fillColor: Colors.white),
                             ))
                       ],
@@ -120,11 +147,12 @@ class AddNewTask extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: [
-                        Text('Time'),
+                        const Text('Time'),
                         Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: TextField(
-                              decoration: InputDecoration(
+                              controller: timeController,
+                              decoration: const InputDecoration(
                                   filled: true, fillColor: Colors.white),
                             ))
                       ],
@@ -134,20 +162,32 @@ class AddNewTask extends StatelessWidget {
               ),
             ),
             const Padding(
-                padding: EdgeInsets.only(top: 10), child: Text('Notes')),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.only(top: 10), child: Text('Description')),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: SizedBox(
                 height: 170,
                 child: TextField(
+                  controller: descriptionController,
                   expands: true,
                   maxLines: null,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       filled: true, fillColor: Colors.white, isDense: true),
                 ),
               ),
             ),
-            ElevatedButton(onPressed: () {}, child: const Text('Save'))
+            ElevatedButton(
+                onPressed: () {
+                  Task newTask = Task(
+                    type: taskType,
+                    title: titleController.text,
+                    description: descriptionController.text,
+                    isCompleted: false,
+                  );
+                  widget.addNewTask(newTask);
+                  Navigator.pop(context);
+                },
+                child: const Text('Save'))
           ],
         ),
       ),
