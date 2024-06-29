@@ -87,15 +87,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        primary: false,
-                        itemCount: todo.length,
-                        itemBuilder: (context, index) {
-                          return Todoitem(
-                            task: todo[index],
-                          );
-                        }),
+                    child: FutureBuilder(
+                      future: todoService.getTodos(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null) {
+                          return CircularProgressIndicator();
+                        } else {
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return Todoitem(
+                                  task: snapshot.data![index],
+                                );
+                              });
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -111,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               // Bottom Column
+              /*
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -124,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 task: completed[index],
                               );
                             }),
-                      ))),
+                      ))),*/
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ElevatedButton(
@@ -190,3 +200,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+mixin isNull {}
