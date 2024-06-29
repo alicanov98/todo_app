@@ -49,10 +49,7 @@ class _TodoitemState extends State<Todoitem> {
                   //         decoration: widget.task.completed!
                   //             ? TextDecoration.lineThrough
                   //             : TextDecoration.none)),
-                  if (widget.task.userID != null)
-                    Text('User${widget.task.userID!}')
-                  else
-                    Text('User ID not available'),
+                    Text('User${widget.task.userId}')
                 ],
               ),
             ),

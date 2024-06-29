@@ -10,6 +10,7 @@ class TodoService {
     final response = await http.get(Uri.parse(url));
     List<dynamic> resp = jsonDecode(response.body)['todos'];
     List<Todo> todos = List.empty(growable: true);
+    
     resp.forEach((e) {
       todos.add(Todo.fromJson(e));
     });
