@@ -15,7 +15,7 @@ class _TodoitemState extends State<Todoitem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: widget.task.completed! ? Colors.grey : Colors.white,
+      color: isChecked ? Colors.grey : Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -33,14 +33,17 @@ class _TodoitemState extends State<Todoitem> {
             Expanded(
               child: Column(
                 children: [
-                  Text(
-                    widget.task.todo!,
-                    style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                        decoration: widget.task.completed!
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none),
+                  Align(
+                    child: Text(
+                      widget.task.todo!,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          decoration: isChecked
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none),
+                    ),
                   ),
                   // Text(widget.task.todo!,
                   //     style: TextStyle(
@@ -49,7 +52,7 @@ class _TodoitemState extends State<Todoitem> {
                   //         decoration: widget.task.completed!
                   //             ? TextDecoration.lineThrough
                   //             : TextDecoration.none)),
-                    Text('User${widget.task.userId}')
+                  Text('User${widget.task.userId}')
                 ],
               ),
             ),
