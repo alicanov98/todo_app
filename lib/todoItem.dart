@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:todo_app/constants/tasktype.dart';
 import 'package:todo_app/model/todo.dart';
 
 class Todoitem extends StatefulWidget {
-  const Todoitem({super.key, required this.task});
+  const Todoitem({super.key, required this.task, required this.onToggle});
   final Todo task;
+  final Function(Todo) onToggle;
 
   @override
   State<Todoitem> createState() => _TodoitemState();
@@ -12,6 +13,13 @@ class Todoitem extends StatefulWidget {
 
 class _TodoitemState extends State<Todoitem> {
   bool isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.task.isCompleted ?? true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -22,20 +30,18 @@ class _TodoitemState extends State<Todoitem> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            /*
             widget.task.type == Tasktype.note
                 ? Image.asset('lib/assets/images/category_one.png')
                 : widget.task.type == Tasktype.contest
                     ? Image.asset('lib/assets/images/category_three.png')
                     : Image.asset('lib/assets/images/category_two.png'),
-                    */
-            Image.asset('lib/assets/images/category_one.png'),
             Expanded(
               child: Column(
                 children: [
                   Align(
+                    alignment: Alignment.center,
                     child: Text(
-                      widget.task.todo!,
+                      widget.task.title!,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 16,
@@ -45,25 +51,19 @@ class _TodoitemState extends State<Todoitem> {
                               : TextDecoration.none),
                     ),
                   ),
-                  // Text(widget.task.todo!,
-                  //     style: TextStyle(
-                  //         fontSize: 9,
-                  //         fontWeight: FontWeight.bold,
-                  //         decoration: widget.task.completed!
-                  //             ? TextDecoration.lineThrough
-                  //             : TextDecoration.none)),
-                  Text('User${widget.task.userId}')
                 ],
               ),
             ),
             Checkbox(
-                value: isChecked,
-                onChanged: (val) => {
-                      setState(() {
-                        widget.task.completed = !widget.task.completed!;
-                        isChecked = val!;
-                      })
-                    })
+              value: isChecked,
+              onChanged: (val) {
+                setState(() {
+                  isChecked = val!;
+                  widget.task.isCompleted = isChecked;
+                });
+                widget.onToggle(widget.task);
+              },
+            )
           ],
         ),
       ),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:todo_app/constants/color.dart';
 import 'package:todo_app/constants/tasktype.dart';
-import 'package:todo_app/model/task.dart';
+import 'package:todo_app/model/todo.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key, required this.addNewTask});
-  final void Function(Task newTask) addNewTask;
+  final void Function(Todo newTask) addNewTask;
   // Passing function as parameter
 
   @override
@@ -178,7 +178,7 @@ class _AddNewTaskState extends State<AddNewTaskScreen> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  Task newTask = Task(
+                  Todo newTask = Todo(
                     type: taskType,
                     title: titleController.text,
                     description: descriptionController.text,
